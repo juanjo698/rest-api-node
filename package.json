@@ -1,0 +1,35 @@
+{
+  "name": "rest-api-node",
+  "version": "1.0.0",
+  "description": "An API rest with node",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juanjo698/rest-api-node.git"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "rest"
+  ],
+  "author": "Juan Jose Garzon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/juanjo698/rest-api-node/issues"
+  },
+  "homepage": "https://github.com/juanjo698/rest-api-node#readme",
+  "devDependencies": {
+    "standard": "^17.1.0"
+  },
+  "eslintConfig": {
+    "extends": "standard"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "zod": "^3.22.2"
+  }
+}
