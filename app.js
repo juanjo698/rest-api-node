@@ -2,7 +2,6 @@ const express = require('express')
 const movies = require('./movies.json')
 const crypto = require('node:crypto')
 const { validateMovie, validatePartialMovie } = require('./schemas/movies')
-const { json } = require('express')
 
 const app = express()
 app.disable('x-powered-by')
