@@ -1,6 +1,9 @@
 const express = require('express')
 const movies = require('./movies.json')
 const crypto = require('node:crypto')
+const { validateMovie, validatePartialMovie } = require('./schemas/movies')
+const { json } = require('express')
+
 const app = express()
 app.disable('x-powered-by')
 app.use(express.json())
@@ -19,25 +22,15 @@ app.get('/movies', (req, res) => {
 })
 
 app.post('/movies', (req, res) => {
-  const {
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate,
-    poster
-  } = req.body
+  const result = validateMovie(req.body)
+
+  if (result.error) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
+  }
 
   const newMovie = {
     id: crypto.randomUUID(),
-    title,
-    genre,
-    year,
-    director,
-    duration,
-    rate: rate ?? 0,
-    poster
+    ...result.data
   }
 
   // this is not REST, DB implementation missing
@@ -53,6 +46,30 @@ app.get('/movies/:id', (req, res) => {
   if (movie) return res.json(movie)
 
   res.status(404).json({ message: 'Movie not found' })
+})
+
+app.patch('/movies/:id', (req, res) => {
+  const result = validatePartialMovie(req.body)
+
+  if (!result.success) {
+    return res.status(400).json({ error: JSON.parse(result.error.message) })
+  }
+
+  const { id } = req.params
+  const movieIndex = movies.findIndex(movie => movie.id === id)
+
+  if (movieIndex === -1) {
+    res.status(404).json({ message: 'Movie not found' })
+  }
+
+  const movie = movies[movieIndex]
+
+  const updatedMovie = {
+    ...movie,
+    ...result.data
+  }
+
+  return res.json(updatedMovie)
 })
 
 const PORT = process.env.PORT ?? 1234
